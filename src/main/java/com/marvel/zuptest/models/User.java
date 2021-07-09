@@ -29,7 +29,7 @@ public class User {
     @Column(unique = true)
     private String cpf;
 
-    @JsonFormat(pattern="dd/MM/yyyy HH:mm")
+    @JsonFormat(pattern="dd/MM/yyyy")
     @NotNull
     private Date birthdate;
 

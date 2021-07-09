@@ -1,6 +1,7 @@
 package com.marvel.zuptest.services;
 
-import com.marvel.zuptest.UserRepository;
+import com.marvel.zuptest.exceptions.EntityNotUniqueException;
+import com.marvel.zuptest.repositories.UserRepository;
 import com.marvel.zuptest.exceptions.EntityNotFoundException;
 import com.marvel.zuptest.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ public class UserService {
     private UserRepository userRepository;
 
     public User addUser(User user){
+        verifyNotUniqueUser(user);
         user.setId(null);
         return userRepository.save(user);
     }
@@ -39,5 +41,20 @@ public class UserService {
     public void deleteUser(Long id){
         findUserById(id);
         userRepository.deleteById(id);
+    }
+
+    public void verifyNotUniqueUser(User user){
+        User objCpf = userRepository.findByCpf(user.getCpf());
+        User objEmail = userRepository.findByEmail(user.getEmail());
+
+        if(objCpf != null && objEmail != null){
+            throw new EntityNotUniqueException("The field CPF and EMAIL must be unique");
+        }
+        if(objCpf != null){
+            throw new EntityNotUniqueException("The field CPF must be unique");
+        }
+        if(objEmail != null){
+            throw new EntityNotUniqueException("The field EMAIL must be unique");
+        }
     }
 }
