@@ -9,7 +9,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class User {
@@ -32,6 +34,13 @@ public class User {
     @JsonFormat(pattern="dd/MM/yyyy")
     @Column(nullable = false)
     private LocalDate birthdate;
+
+    @ManyToMany
+    @JoinTable(name="USER_COMICS",
+            joinColumns = @JoinColumn(name="user_id"),
+            inverseJoinColumns = @JoinColumn(name="comics_id")
+    )
+    private List<Comics> comics = new ArrayList<>();
 
     public User() {
     }
@@ -82,5 +91,13 @@ public class User {
 
     public void setBirthdate(LocalDate birthdate) {
         this.birthdate = birthdate;
+    }
+
+    public List<Comics> getComics() {
+        return comics;
+    }
+
+    public void setComics(List<Comics> comics) {
+        this.comics = comics;
     }
 }
