@@ -2,10 +2,13 @@ package com.marvel.zuptest.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sun.istack.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -15,28 +18,25 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotNull
+    @Column(nullable = false)
     private String name;
 
-    @NotNull
-    @Column(unique = true)
-    @NotBlank
+    @Column(unique = true, nullable = false)
     @Email
     private String email;
 
-    @NotNull
-    @NotBlank
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
+    @Size(min = 11, max = 15)
     private String cpf;
 
     @JsonFormat(pattern="dd/MM/yyyy")
-    @NotNull
-    private Date birthdate;
+    @Column(nullable = false)
+    private LocalDate birthdate;
 
     public User() {
     }
 
-    public User(Long id, String name, String email, String cpf, Date birthdate) {
+    public User(Long id, String name, String email, String cpf, LocalDate birthdate) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -76,11 +76,11 @@ public class User {
         this.cpf = cpf;
     }
 
-    public Date getBirthdate() {
+    public LocalDate getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(Date birthdate) {
+    public void setBirthdate(LocalDate birthdate) {
         this.birthdate = birthdate;
     }
 }

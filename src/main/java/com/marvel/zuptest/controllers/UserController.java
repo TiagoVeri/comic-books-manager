@@ -21,7 +21,6 @@ public class UserController {
     @PostMapping(value = "/create")
     public ResponseEntity<User> addUser(@Valid @RequestBody User user){
         user = userService.addUser(user);
-
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(user.getId()).toUri();
         return ResponseEntity.created(uri).build();

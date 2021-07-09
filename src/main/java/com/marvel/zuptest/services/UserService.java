@@ -17,7 +17,7 @@ public class UserService {
     private UserRepository userRepository;
 
     public User addUser(User user){
-        verifyNotUniqueUser(user);
+        isValid(user);
         user.setId(null);
         return userRepository.save(user);
     }
@@ -35,6 +35,7 @@ public class UserService {
     }
 
     public void updateUser(User user){
+         isValid(user);
          userRepository.save(user);
     }
 
@@ -43,7 +44,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public void verifyNotUniqueUser(User user){
+    public void isValid(User user){
         User objCpf = userRepository.findByCpf(user.getCpf());
         User objEmail = userRepository.findByEmail(user.getEmail());
 
@@ -56,5 +57,16 @@ public class UserService {
         if(objEmail != null){
             throw new EntityNotUniqueException("The field EMAIL must be unique");
         }
+
+        if(user.getName() == null || user.getEmail() == null ||
+                user.getCpf() == null || user.getBirthdate() == null){
+            throw new NullPointerException("All fields are required");
+        }
+
+        if(user.getName().isBlank() || user.getEmail().isBlank() ||
+                user.getCpf().isBlank() || user.getBirthdate().toString().isBlank()){
+            throw new IllegalArgumentException("All fields are required");
+        }
     }
+
 }
