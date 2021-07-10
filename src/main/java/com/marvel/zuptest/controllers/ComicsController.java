@@ -1,12 +1,15 @@
 package com.marvel.zuptest.controllers;
 
 import com.marvel.zuptest.controllers.response.ComicsResponse;
+import com.marvel.zuptest.models.Comics;
+import com.marvel.zuptest.services.ComicsMarvelService;
 import com.marvel.zuptest.services.ComicsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/marvel")
@@ -15,13 +18,21 @@ public class ComicsController {
     @Autowired
     private ComicsService service;
 
-    @GetMapping("/comics")
-    public ComicsResponse findAll() {
-        return service.findAll();
+//    @GetMapping("/comics")
+//    public ComicsResponse findAll() {
+//        return service.findAll();
+//    }
+//
+    @GetMapping("/comics/{comicId}")
+    public ResponseEntity<Comics> findById(@PathVariable Integer comicId){
+        return ResponseEntity.ok(service.findComicById(comicId));
     }
 
-    @GetMapping("/comics/{comicId}")
-    public ComicsResponse findById(@PathVariable Integer comicId){
-        return service.findbyId(comicId);
+    @PostMapping("/add")
+    public ResponseEntity<Comics> addComicFromMarvel(@RequestParam Integer comicMarvelId){
+        Comics comic = service.addComic(comicMarvelId);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(comic.getComicId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 }

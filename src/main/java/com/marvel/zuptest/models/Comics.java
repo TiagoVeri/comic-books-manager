@@ -1,10 +1,9 @@
 package com.marvel.zuptest.models;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Comics {
@@ -12,19 +11,19 @@ public class Comics {
     @Id
     private Integer comicId;
     private String title;
-    private Float price;
+    private BigDecimal price;
     private String isbn;
+
+    @Column(columnDefinition = "LONGTEXT")
     private String description;
 
-    @ManyToMany(mappedBy="comics")
-    private List<User> users = new ArrayList<>();
-
-    //private List<?> creators = new ArrayList<>();
+    @ElementCollection
+    private Set<String> creators = new HashSet<>();
 
     public Comics() {
     }
 
-    public Comics(Integer comicId, String title, Float price, String isbn, String description) {
+    public Comics(Integer comicId, String title, BigDecimal price, String isbn, String description) {
         this.comicId = comicId;
         this.title = title;
         this.price = price;
@@ -48,11 +47,11 @@ public class Comics {
         this.title = title;
     }
 
-    public Float getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Float price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -72,11 +71,11 @@ public class Comics {
         this.description = description;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public Set<String> getCreators() {
+        return creators;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setCreators(Set<String> creators) {
+        this.creators = creators;
     }
 }

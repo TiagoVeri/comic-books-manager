@@ -1,37 +1,54 @@
 package com.marvel.zuptest.services;
 
-import com.marvel.zuptest.clients.MarvelComicsClient;
-import com.marvel.zuptest.controllers.response.ComicsResponse;
+import com.marvel.zuptest.controllers.response.*;
+import com.marvel.zuptest.exceptions.EntityNotFoundException;
 import com.marvel.zuptest.models.Comics;
-import org.apache.commons.codec.digest.DigestUtils;
+import com.marvel.zuptest.repositories.ComicsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
 
 @Service
 public class ComicsService {
-    private static final String PUBLIC_KEY = "7b953bcac875acc429e157c128a65229";
-    private static final String PRIVATE_KEY = "4bb711c034b8901ad412cd2cee8f15e55c4e59b4";
-    Long timeStamp = new Date().getTime();
 
     @Autowired
-    private MarvelComicsClient client;
+    private ComicsMarvelService comicsMarvelService;
 
-    public ComicsResponse findAll() {
-     return client.getAll(timeStamp, PUBLIC_KEY, buildHash(timeStamp));
+    @Autowired
+    private ComicsRepository comicsRepository;
+
+    public Comics addComic(Integer comicId){
+        Comics comic = new Comics();
+        //TODO not found exception
+        ComicsResponse marvelComic = comicsMarvelService.findbyId(comicId);
+
+        ResultsResponse dataResponse = marvelComic.getData().getResults().get(0);
+        List<PricesResponse> prices = dataResponse.getPrices();
+        Set<String> creators = new HashSet<>();
+        comic.setComicId(dataResponse.getId());
+        comic.setTitle(dataResponse.getTitle());
+
+        for(PricesResponse price : prices){
+           if(price.getType().equals("printPrice")) {
+              BigDecimal value = new BigDecimal(price.getPrice());
+              comic.setPrice(value);
+           }
+        }
+        for(ItemCreatorsResponse creator : dataResponse.getCreators().getItems()){
+           creators.add(creator.getName());
+        }
+        comic.setCreators(creators);
+        comic.setIsbn(dataResponse.getIsbn());
+        comic.setDescription(dataResponse.getDescription());
+
+;       return comicsRepository.save(comic);
     }
 
-    public ComicsResponse findbyId(Integer id) {
-        return client.getById(id, timeStamp, PUBLIC_KEY, buildHash(timeStamp));
-    }
-
-
-    private String buildHash(Long timeStamp) {
-        return DigestUtils.md5Hex(timeStamp + PRIVATE_KEY + PUBLIC_KEY);
-    }
-
-    public ComicsService(MarvelComicsClient client) {
-        this.client = client;
+    public Comics findComicById(Integer id){
+        Optional<Comics> comic = comicsRepository.findById(id);
+        return comic.orElseThrow(() ->  new EntityNotFoundException("Comic Book Not Found"));
     }
 }
