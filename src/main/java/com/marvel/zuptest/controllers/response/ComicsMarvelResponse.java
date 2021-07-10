@@ -1,6 +1,6 @@
 package com.marvel.zuptest.controllers.response;
 
-public class ComicsResponse {
+public class ComicsMarvelResponse {
     private String copyright;
     private String attributionHTML;
 

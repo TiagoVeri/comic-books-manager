@@ -1,7 +1,8 @@
 package com.marvel.zuptest.services;
 
 import com.marvel.zuptest.clients.MarvelComicsClient;
-import com.marvel.zuptest.controllers.response.ComicsResponse;
+import com.marvel.zuptest.controllers.response.ComicsMarvelResponse;
+import com.marvel.zuptest.exceptions.EntityNotFoundException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,12 @@ public class ComicsMarvelService {
     @Autowired
     private MarvelComicsClient client;
 
-    public ComicsResponse findAll() {
-     return client.getAll(timeStamp, PUBLIC_KEY, buildHash(timeStamp));
+    public ComicsMarvelResponse findAll() {
+        return client.getAll(timeStamp, PUBLIC_KEY, buildHash(timeStamp));
     }
 
-    public ComicsResponse findbyId(Integer id) {
+    public ComicsMarvelResponse findbyId(Integer id){
+        //TODO: add message to the body
         return client.getById(id, timeStamp, PUBLIC_KEY, buildHash(timeStamp));
     }
 

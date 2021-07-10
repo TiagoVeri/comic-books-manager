@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 
 @Service
@@ -22,8 +21,7 @@ public class ComicsService {
 
     public Comics addComic(Integer comicId){
         Comics comic = new Comics();
-        //TODO not found exception
-        ComicsResponse marvelComic = comicsMarvelService.findbyId(comicId);
+        ComicsMarvelResponse marvelComic = comicsMarvelService.findbyId(comicId);
 
         ResultsResponse dataResponse = marvelComic.getData().getResults().get(0);
         List<PricesResponse> prices = dataResponse.getPrices();
@@ -44,7 +42,7 @@ public class ComicsService {
         comic.setIsbn(dataResponse.getIsbn());
         comic.setDescription(dataResponse.getDescription());
 
-;       return comicsRepository.save(comic);
+       return comicsRepository.save(comic);
     }
 
     public Comics findComicById(Integer id){
