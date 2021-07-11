@@ -4,6 +4,15 @@
 The application is an API REST that simulate a Comic book manager from a User.
 It makes an integration with Marvel API using a find By ID request, and after that we add the comic book in our system.
 
+**It Uses**
+
+1. Java
+2. Spring Boot
+3. Spring Data
+4. Hibernate/JPA
+5. Spring-Cloud-Feign
+6. Marvel REST API
+
 **User class can:** 
 
 1. Register yourself in the application
