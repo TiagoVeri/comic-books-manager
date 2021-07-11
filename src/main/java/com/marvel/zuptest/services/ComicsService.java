@@ -26,7 +26,7 @@ public class ComicsService {
         ComicsMarvelResponse marvelComic = comicsMarvelService.findbyId(comicId);
 
         if(marvelComic.getData() == null){
-            throw new EntityNotFoundException("Comic book not found in Marvel API");
+            throw new IllegalArgumentException("Comic book not found in Marvel API");
         }
         ResultsResponse dataResponse = marvelComic.getData().getResults().get(0);
         List<PricesResponse> prices = dataResponse.getPrices();
