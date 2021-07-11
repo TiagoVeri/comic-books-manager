@@ -11,8 +11,8 @@ import java.util.Date;
 
 @Service
 public class ComicsMarvelService {
-    private static final String PUBLIC_KEY = "7b953bcac875acc429e157c128a65229";
-    private static final String PRIVATE_KEY = "4bb711c034b8901ad412cd2cee8f15e55c4e59b4";
+    private static final String PUBLIC_KEY = "Key bliped"; //Please add your own key generated in https://developer.marvel.com/
+    private static final String PRIVATE_KEY = "Key bliped";
     Long timeStamp = new Date().getTime();
 
     @Autowired
@@ -23,7 +23,6 @@ public class ComicsMarvelService {
     }
 
     public ComicsMarvelResponse findbyId(Integer id){
-        //TODO: add message to the body
         return client.getById(id, timeStamp, PUBLIC_KEY, buildHash(timeStamp));
     }
 
