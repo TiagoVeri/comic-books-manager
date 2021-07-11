@@ -21,10 +21,13 @@ public class ComicsService {
     @Autowired
     private ComicsRepository comicsRepository;
 
-    public Comics addComic(Integer comicId){
+    public Comics addComic(Integer comicId) throws EntityNotFoundException{
         Comics comic = new Comics();
         ComicsMarvelResponse marvelComic = comicsMarvelService.findbyId(comicId);
 
+        if(marvelComic.getData() == null){
+            throw new EntityNotFoundException("Comic book not found in Marvel API");
+        }
         ResultsResponse dataResponse = marvelComic.getData().getResults().get(0);
         List<PricesResponse> prices = dataResponse.getPrices();
         Set<String> creators = new HashSet<>();
