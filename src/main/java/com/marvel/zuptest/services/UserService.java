@@ -8,6 +8,10 @@ import com.marvel.zuptest.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,9 +33,28 @@ public class UserService {
     public User findUserById(Long id){
         Optional<User> obj = userRepository.findById(id);
 
-        return obj.orElseThrow(() -> {
+        if(obj.isEmpty()){
             throw new EntityNotFoundException("User ID: "+ id + " not found");
-        });
+        }
+        List<Comics> comics = obj.get().getComics();
+        for (Comics comic : comics ){
+            boolean discountDay = isDiscountDay(comic);
+            comic.setDiscount(discountDay);
+            if(discountDay){
+                BigDecimal discountValue = comic.getPrice().multiply(new BigDecimal(0.1));
+                comic.setPrice(comic.getPrice().subtract(discountValue).setScale(2, RoundingMode.HALF_EVEN));
+            }
+        }
+        obj.get().setComics(comics);
+        return obj.get();
+    }
+
+    public Boolean isDiscountDay(Comics comic){
+        DayOfWeek now = LocalDate.now().getDayOfWeek();
+        if(now.equals(comic.getIsbnDay())){
+            return true;
+        }
+        return false;
     }
 
     public List<User> findAllUsers(){

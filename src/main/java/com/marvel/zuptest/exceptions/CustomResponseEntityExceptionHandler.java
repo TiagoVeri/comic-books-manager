@@ -24,7 +24,7 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     public final ResponseEntity<ErrorDetails> handleEntityAlreadyExists(EntityNotUniqueException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage(),
                 request.getDescription(false));
-        return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(errorDetails, BAD_REQUEST);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)

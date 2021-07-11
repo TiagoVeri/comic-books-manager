@@ -16,7 +16,7 @@ public class Comics {
     private BigDecimal price;
     private String isbn;
     private DayOfWeek isbnDay;
-    private Boolean discountDay;
+    private Boolean discount;
 
     @Column(columnDefinition = "LONGTEXT")
     private String description;
@@ -27,14 +27,14 @@ public class Comics {
     public Comics() {
     }
 
-    public Comics(Integer comicId, String title, BigDecimal price, String isbn, String description, DayOfWeek isbnDay, Boolean discountDay) {
+    public Comics(Integer comicId, String title, BigDecimal price, String isbn, String description, DayOfWeek isbnDay, Boolean discount) {
         this.comicId = comicId;
         this.title = title;
         this.price = price;
         this.isbn = isbn;
         this.description = description;
         this.isbnDay = isbnDay;
-        this.discountDay = discountDay;
+        this.discount = discount;
     }
 
     public Integer getComicId() {
@@ -85,12 +85,12 @@ public class Comics {
         this.creators = creators;
     }
 
-    public Boolean getDiscountDay() {
-        return discountDay;
+    public Boolean getDiscount() {
+        return discount;
     }
 
-    public void setDiscountDay(Boolean discountDay) {
-        this.discountDay = discountDay;
+    public void setDiscount(Boolean discount) {
+        this.discount = discount;
     }
 
     public DayOfWeek getIsbnDay() {
