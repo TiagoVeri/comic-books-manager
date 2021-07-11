@@ -1,12 +1,15 @@
 package com.marvel.zuptest.services;
 
 import com.marvel.zuptest.exceptions.EntityNotUniqueException;
+import com.marvel.zuptest.models.Comics;
 import com.marvel.zuptest.repositories.UserRepository;
 import com.marvel.zuptest.exceptions.EntityNotFoundException;
 import com.marvel.zuptest.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +22,7 @@ public class UserService {
     public User addUser(User user){
         isValid(user);
         user.setId(null);
+
         return userRepository.save(user);
     }
 
@@ -35,8 +39,15 @@ public class UserService {
     }
 
     public void updateUser(User user){
-         isValid(user);
-         userRepository.save(user);
+        User newObj = findUserById(user.getId());
+        updateData(newObj, user);
+        userRepository.save(newObj);
+    }
+
+    public void addComicsToUser(User user){
+        User newObj = findUserById(user.getId());
+        addComics(newObj, user);
+        userRepository.save(newObj);
     }
 
     public void deleteUser(Long id){
@@ -69,4 +80,16 @@ public class UserService {
         }
     }
 
+    private void updateData(User newObj, User obj){
+        newObj.setName(obj.getName());
+        newObj.setBirthdate(obj.getBirthdate());
+    }
+
+    private void addComics(User newObj, User obj){
+        List<Comics> comics = obj.getComics();
+        for(Comics userComics : newObj.getComics()){
+            comics.add(userComics);
+        }
+        newObj.setComics(comics);
+    }
 }

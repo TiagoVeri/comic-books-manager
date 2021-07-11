@@ -25,7 +25,7 @@ public class UserController {
                 .path("/{id}").buildAndExpand(user.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
-    //read
+
     @GetMapping(value = "/{id}")
     public ResponseEntity<User> findUserById(@PathVariable Long id){
         return ResponseEntity.ok(userService.findUserById(id));
@@ -36,13 +36,21 @@ public class UserController {
         List<User> list = userService.findAllUsers();
         return ResponseEntity.ok().body(list);
     }
-    //update
+
     @PutMapping(value = "/{id}")
     public ResponseEntity<Void> updateUser(@PathVariable Long id, @RequestBody User user){
         user.setId(id);
         userService.updateUser(user);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping(value = "/{id}/addcomics")
+    public ResponseEntity<Void> addComicsToUser(@PathVariable Long id, @RequestBody User user){
+        user.setId(id);
+        userService.addComicsToUser(user);
+        return ResponseEntity.noContent().build();
+    }
+
     //delete
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id){

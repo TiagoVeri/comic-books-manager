@@ -1,6 +1,9 @@
 package com.marvel.zuptest.controllers;
 
+import com.marvel.zuptest.clients.MarvelComicsClient;
+import com.marvel.zuptest.controllers.response.ComicsMarvelResponse;
 import com.marvel.zuptest.models.Comics;
+import com.marvel.zuptest.services.ComicsMarvelService;
 import com.marvel.zuptest.services.ComicsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,15 @@ public class ComicsController {
 
     @Autowired
     private ComicsService service;
+
+    @Autowired
+    private ComicsMarvelService comicsMarvelService;
+
+    //Get all Marvel comics from Marvel API
+    @GetMapping("/comics/marvelapi")
+    public ComicsMarvelResponse findAllMarvelComics() {
+        return comicsMarvelService.findAll();
+    }
 
     @GetMapping("/comics/{comicId}")
     public ResponseEntity<Comics> findById(@PathVariable Integer comicId){

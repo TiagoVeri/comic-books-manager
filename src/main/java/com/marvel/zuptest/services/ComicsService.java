@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -42,11 +44,42 @@ public class ComicsService {
         comic.setIsbn(dataResponse.getIsbn());
         comic.setDescription(dataResponse.getDescription());
 
+        if(dataResponse.getIsbn().length() > 0){
+            char isbn =  dataResponse.getIsbn().charAt(dataResponse.getIsbn().length() - 1);
+            DayOfWeek isbnDay = verifyIbnsDay(isbn);
+            comic.setIsbnDay(isbnDay);
+            comic.setIsbn(dataResponse.getIsbn());
+        } else {
+            comic.setIsbn("No ISBN Registered in Marvel API");
+        }
+
        return comicsRepository.save(comic);
     }
 
     public Comics findComicById(Integer id){
         Optional<Comics> comic = comicsRepository.findById(id);
         return comic.orElseThrow(() ->  new EntityNotFoundException("Comic Book Not Found"));
+    }
+
+    public DayOfWeek verifyIbnsDay(char value){
+
+        int lastIbns = Integer.parseInt(String.valueOf(value));
+
+        if(lastIbns == 0 || lastIbns == 1 ){
+            return DayOfWeek.MONDAY;
+        }
+        if(lastIbns == 2 || lastIbns == 3 ){
+            return DayOfWeek.TUESDAY;
+        }
+        if(lastIbns == 4 || lastIbns == 5 ){
+            return DayOfWeek.WEDNESDAY;
+        }
+        if(lastIbns == 6 || lastIbns == 7 ){
+            return DayOfWeek.THURSDAY;
+        }
+        if(lastIbns == 8 || lastIbns == 9 ){
+            return DayOfWeek.FRIDAY;
+        }
+        return null;
     }
 }

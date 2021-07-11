@@ -2,6 +2,8 @@ package com.marvel.zuptest.models;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,6 +15,8 @@ public class Comics {
     private String title;
     private BigDecimal price;
     private String isbn;
+    private DayOfWeek isbnDay;
+    private Boolean discountDay;
 
     @Column(columnDefinition = "LONGTEXT")
     private String description;
@@ -23,12 +27,14 @@ public class Comics {
     public Comics() {
     }
 
-    public Comics(Integer comicId, String title, BigDecimal price, String isbn, String description) {
+    public Comics(Integer comicId, String title, BigDecimal price, String isbn, String description, DayOfWeek isbnDay, Boolean discountDay) {
         this.comicId = comicId;
         this.title = title;
         this.price = price;
         this.isbn = isbn;
         this.description = description;
+        this.isbnDay = isbnDay;
+        this.discountDay = discountDay;
     }
 
     public Integer getComicId() {
@@ -77,5 +83,21 @@ public class Comics {
 
     public void setCreators(Set<String> creators) {
         this.creators = creators;
+    }
+
+    public Boolean getDiscountDay() {
+        return discountDay;
+    }
+
+    public void setDiscountDay(Boolean discountDay) {
+        this.discountDay = discountDay;
+    }
+
+    public DayOfWeek getIsbnDay() {
+        return isbnDay;
+    }
+
+    public void setIsbnDay(DayOfWeek isbnDay) {
+        this.isbnDay = isbnDay;
     }
 }
