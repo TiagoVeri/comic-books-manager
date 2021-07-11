@@ -15,7 +15,7 @@ It makes an integration with Marvel API using a find By ID request, and after th
 
 **Comics class can:**
 
-1.Find All Comics registered in Marvel API
-2.Add a new Comic book using only a Marvel API comicID as parameter
-3.Find Comic registered in our system by ID
+1. Find All Comics registered in Marvel API
+2. Add a new Comic book using only a Marvel API comicID as parameter
+3. Find Comic registered in our system by ID
 
